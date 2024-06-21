@@ -12,6 +12,9 @@ from flask import (
 import requests
 from dotenv import load_dotenv
 import os
+import pandas as pd
+from google.cloud import bigquery
+import plotly.express as px
 
 def get_now():
     from datetime import datetime as dt
@@ -28,15 +31,27 @@ def hash_password(password):
 def index():
     return render_template('index.html', isLoginPage=False, isAuthenticated=session.get("isAuthenticated", False))
 
+
 @app.route('/run', methods=['GET', 'POST'])
 def run():
     if not session.get("isAuthenticated", False):
         return redirect(url_for('login'))
+
     google_map_api_key = os.getenv('GOOGLE_MAP_API_KEY')
-    # def index():
-    items = [f'Item {i}' for i in range(1, 3)]  # Example list of items
-    # return render_template('index.html', items=items)
-    return render_template('run.html', isLoginPage=False, isAuthenticated=session.get("isAuthenticated", False), google_map_api_key=google_map_api_key, items=items)
+
+    query = """
+    SELECT * FROM `sublime-lyceum-426907-r9.ama.merged`
+    LIMIT 100
+    """
+    client = bigquery.Client()
+    df = client.query(query).to_dataframe()
+
+    fig = px.bar(df, x='feature1', y='target_variable', title='Visualization')
+    graph_html = fig.to_html(full_html=False)
+
+    items = [f'Item {i}' for i in range(1, 3)]
+
+    return render_template('run.html', isLoginPage=False, isAuthenticated=session.get("isAuthenticated", False), google_map_api_key=google_map_api_key, items=items, graph_html=graph_html)
 
 
 # this is not used as of now
