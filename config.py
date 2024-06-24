@@ -35,8 +35,6 @@ creds_dict = {
 }
 
 CREDS = Credentials.from_service_account_info(creds_dict)
-print(json.dumps(creds_dict, indent=4))
-print("Credentials successfully created")
 
 # create a db instance
 db = SQLAlchemy(app)

@@ -14,14 +14,18 @@ import pandas as pd
 import numpy as np
 import requests
 import json
+import tempfile
 import os
 
 from plots import make_plots, querry_bq
 
-# FOR RAJH
-# this used to be
-# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './sublime-lyceum-426907-r9-353181f6f35f.json'
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = json.dumps(creds_dict)
+cred = json.dumps(creds_dict, indent=4)
+
+with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as temp_file:
+    temp_file.write(cred.encode())
+    temp_file_path = temp_file.name
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = temp_file_path
 
 def get_now():
     from datetime import datetime as dt
