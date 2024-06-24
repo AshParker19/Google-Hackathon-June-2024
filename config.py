@@ -2,7 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from dotenv import load_dotenv
 from flask_cors import CORS
-from google.oauth2.service_account import Credentials
 import json
 import os
 
@@ -30,11 +29,8 @@ creds_dict = {
     "auth_uri": os.getenv('GOOGLE_AUTH_URI', ''),
     "token_uri": os.getenv('GOOGLE_TOKEN_URI', ''),
     "auth_provider_x509_cert_url": os.getenv('GOOGLE_AUTH_PROVIDER_X509_CERT_URL', ''),
-    "client_x509_cert_url": os.getenv('GOOGLE_CLIENT_X509_CERT_URL', ''),
-    "universe_domain": os.getenv('GOOGLE_UNIVERSE_DOMAIN', '')
+    "client_x509_cert_url": os.getenv('GOOGLE_CLIENT_X509_CERT_URL', '')
 }
-
-CREDS = Credentials.from_service_account_info(creds_dict)
 
 # create a db instance
 db = SQLAlchemy(app)
