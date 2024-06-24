@@ -1,4 +1,4 @@
-from config import app, db
+from config import app, db, creds_dict
 from models import *
 from flask import (
     render_template,
@@ -18,8 +18,10 @@ import os
 
 from plots import make_plots, querry_bq
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './sublime-lyceum-426907-r9-353181f6f35f.json'
-
+# FOR RAJH
+# this used to be
+# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './sublime-lyceum-426907-r9-353181f6f35f.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = json.dumps(creds_dict)
 
 def get_now():
     from datetime import datetime as dt
