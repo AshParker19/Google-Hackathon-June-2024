@@ -2,8 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from dotenv import load_dotenv
 from flask_cors import CORS
-import base64
-import json
 import os
 
 load_dotenv()
