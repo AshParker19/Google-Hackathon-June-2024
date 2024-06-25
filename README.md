@@ -17,5 +17,5 @@
 
 ---
 ### How to stop the server:
-1. Check the name of the active service: `gcloud app services list`.
-2. Stop the service: `gcloud app services stop SERVICE_NAME`.
+1. Check the name of the active service: `gcloud run services list`.
+2. Stop the service: `gcloud run services delete SERVICE_NAME`.
