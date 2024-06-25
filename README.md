@@ -7,14 +7,13 @@
 1. Install Google Cloud CLI for your OS: https://cloud.google.com/sdk/docs/install.
    
      (You can check if it's installed by running `gcloud --version` in the terminal.)
-3. `pip install -r requirements.txt`
-4. Activate it according to the OS's instructions.
-5. Go to the project's root directory and do the following steps:
+2. Activate it according to the OS's instructions.
+3. Go to the project's root directory and do the following steps:
     1. `gcloud init`.
     2. Log in with your Google account.  In our case, Oksana owns the project so you need her account to access it.
     3. Choose the project you want to deploy the app to.
-6. `chmod +x ./deploy.sh`
-7. `./deploy.sh`
+4. `chmod +x ./deploy.sh`
+5. `./deploy.sh`
 
 ---
 ### How to stop the server:
