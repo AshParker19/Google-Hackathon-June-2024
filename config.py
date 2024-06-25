@@ -20,13 +20,14 @@ encoded_private_key = os.getenv("GOOGLE_PRIVATE_KEY")
 if encoded_private_key is None:
     raise ValueError("GOOGLE_PRIVATE_KEY is not set")
 
-decoded_private_key = base64.b64decode(encoded_private_key).decode("utf-8")
+# Ensure proper newlines in the private key
+formatted_private_key = encoded_private_key.replace("\\n", "\n")
 
 creds_dict = {
     "type": os.getenv('GOOGLE_TYPE', ''),
     "project_id": os.getenv('GOOGLE_PROJECT_ID', ''),
     "private_key_id": os.getenv('GOOGLE_PRIVATE_KEY_ID', ''),
-    "private_key": decoded_private_key.replace('\\n', '\n'),
+    "private_key": formatted_private_key,
     "client_email": os.getenv('GOOGLE_CLIENT_EMAIL', ''),
     "client_id": os.getenv('GOOGLE_CLIENT_ID', ''),
     "auth_uri": os.getenv('GOOGLE_AUTH_URI', ''),
@@ -35,5 +36,5 @@ creds_dict = {
     "client_x509_cert_url": os.getenv('GOOGLE_CLIENT_X509_CERT_URL', '')
 }
 
-# create a db instance
+# Create a db instance
 db = SQLAlchemy(app)
