@@ -14,12 +14,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'SESSION_PSWD'
 app.config['SECRET_KEY'] = os.urandom(24)
 
-encoded_private_key = os.getenv("GOOGLE_PRIVATE_KEY")
-if encoded_private_key is None:
+formatted_private_key = os.getenv('GOOGLE_PRIVATE_KEY', '').replace("\\n", "\n")
+if formatted_private_key is None:
     raise ValueError("GOOGLE_PRIVATE_KEY is not set")
-
-# Ensure proper newlines in the private key
-formatted_private_key = encoded_private_key.replace("\\n", "\n")
 
 creds_dict = {
     "type": os.getenv('GOOGLE_TYPE', ''),

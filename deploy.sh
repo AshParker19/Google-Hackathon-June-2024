@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # check if gcloud is installed and available in the PATH
-if ! command -v gcloud &> /dev/null
-then
-    echo "Error: gcloud command not found. Please install Google Cloud SDK and add it to your PATH."
-    exit 1
-fi
+# if ! command -v gcloud &> /dev/null
+# then
+#     echo "Error: gcloud command not found. Please install Google Cloud SDK and add it to your PATH."
+#     exit 1
+# fi
 
 # get env variables
 if [ -f .env ]; then
