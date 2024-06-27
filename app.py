@@ -260,7 +260,7 @@ def save_report():
             data_analysis = CACHE.get('data_analysis', lambda: {})
 
             # Filter cards_table for the specific location
-            filtered_cards_table = next([card for card in cards_table if card.get('designacao') == location], None)
+            filtered_cards_table = next((card for card in cards_table if card.get('designacao') == location), None)
 
             # Update body with the filtered data
             body['cards_table'] = filtered_cards_table
