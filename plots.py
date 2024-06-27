@@ -4,6 +4,7 @@ from google.cloud import bigquery as bq
 from google.oauth2 import service_account
 import plotly.express as px
 import plotly.graph_objects as go
+from openai import OpenAI
 import os
 from dotenv import load_dotenv
 from config import creds_dict
