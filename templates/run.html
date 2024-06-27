@@ -1,117 +1,164 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Programa
+Programa
 {% endblock %}
 {% block content %}
 
-<div id="prediction-container" class="runs w-100 m-auto">
+<div class="runs w-100 m-auto">
   <div class="w-100 m-auto p-0">
     <div class="w-100 row m-auto p-0">
-      <div class="w-50 col p-0">
-        <iframe
-          width="600"
-          height="450"
-          loading="lazy"
-          style="display: block; margin: auto"
-          class="float-end"
-          allowfullscreen
-          referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps/embed/v1/place?q=42%20Lisboa&key={{ google_map_api_key }}">
-        </iframe>
+
+      <div id="map_wrapper" class="w-50 p-0">
+        <div id="map" class="float-end border-0 m-auto" style="width: 600px"></div>
       </div>
-      <!-- The Modal -->
-      <div class="modal fade" id="modal0">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+      {% for card in cards_data %}
+      <!-- Modal -->
+      <div class="modal fade" id="modal-{{card.index}}">
+        <div class="custom-modal modal-dialog modal-dialog-centered modal-md">
           <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-              <h4 class="modal-title">"Localização"</h4>
+              <h4 class="modal-title">{{card.designacao}}</h4>
             </div>
             <!-- Modal Body -->
             <!-- Tabs -->
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <ul class="nav nav-tabs" id="myTab{{card.index}}" role="tablist">
               <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="predicted-data-tab" data-bs-toggle="tab" href="#predicted-data" role="tab" aria-controls="predicted-data" aria-selected="true">Previsões</a>
+                <a class="nav-link active" id="predicted-data-tab{{card.index}}" data-bs-toggle="tab"
+                  href="#predicted-data{{card.index}}" role="tab" aria-controls="predicted-data{{card.index}}"
+                  aria-selected="true">Previsões</a>
               </li>
               <li class="nav-item" role="presentation">
-                <a class="nav-link" id="historic-data-tab" data-bs-toggle="tab" href="#historic-data" role="tab" aria-controls="historic-data" aria-selected="false">Dados históricos</a>
+                <a class="nav-link" id="historic-data-tab{{card.index}}" data-bs-toggle="tab"
+                  href="#historic-data{{card.index}}" role="tab" aria-controls="historic-data{{card.index}}"
+                  aria-selected="false">Dados históricos</a>
               </li>
               <li class="nav-item" role="presentation">
-                <a class="nav-link" id="info-tab" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">info</a>
+                <a class="nav-link" id="info-tab{{card.index}}" data-bs-toggle="tab" href="#info{{card.index}}" role="tab" aria-controls="info{{card.index}}" aria-selected="false">Info</a>
               </li>
             </ul>
             <!-- Tab content -->
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="predicted-data" role="tabpanel" aria-labelledby="predicted-data-tab">
+            <div class="tab-content" id="myTabContent{{card.index}}">
+              <div class="tab-pane fade show active" id="predicted-data{{card.index}}" role="tabpanel"
+                aria-labelledby="predicted-data-tab{{card.index}}">
                 <div class="modal-body">
                   <div class="d-flex flex-column justify-content-around">
-                    <div>
-                      <!--BigQuerry Graph-->
-                      {{ graph_html[0][0] | safe }}
+                    <h3 class="text-center">Métricas Previstas</h3>
+                    <div class="d-flex flex-column justify-content-around pb-3">
+                      <table class="text-center">
+                        <thead>
+                          <tr class="border-bottom">
+                            <th scope="col">Ano</th>
+                            <th scope="col">Procuras</th>
+                            <th scope="col">Atendimentos</th>
+                            <th scope="col">Desistências</th>
+                            <th scope="col">T. espera diário</th>
+                            <th scope="col">Necessidade</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
                     </div>
-                    <div>
-                      <!--BigQuerry Graph-->
-                      {{ graph_html[0][1] | safe }}
-                    </div>
-                    <div>
-                      <!--BigQuerry Graph-->
-                      {{ graph_html[0][2] | safe }}
-                    </div>
-                    <div>
-                      <!--BigQuerry Graph-->
-                      {{ graph_html[0][3] | safe }}
-                    </div>
-                    <div>
-                      <!--BigQuerry Graph-->
-                      {{ graph_html[0][4] | safe }}
+                    <!-- index = year index | card.index = card index starting at the top one | card.index_before_sorting = index based on location list (app.py)-->
+                    {% for index in data_by_year[card.index]['Index'] %}
+                    <span class="data-rows"
+                      data-year="{{data_by_year[card.index]['Ano'][index]}}"
+                      data-procuras="{{ data_by_year[card.index_before_sorting]['Procuras'][index] }}"
+                      data-atendim="{{ data_by_year[card.index_before_sorting]['Atendimentos'][index] }}"
+                      data-desist="{{ data_by_year[card.index_before_sorting]['Desistencias'][index] }}"
+                      data-espera="{{ data_by_year[card.index_before_sorting]['Tempo_medio_de_espera_diario'][index] }}"
+                      data-necessidade="{{ data_by_year[card.index_before_sorting]['Necessity_Metric'][index] }}">
+                    </span>
+                    {% endfor %}
+                    <h3 class="text-center pt-5">Gráficos Previstos</h3>
+                    <div class="d-flex flex-column justify-content-around graphs mx-3 data-titles">
+                      <div class="graphs">
+                        {{ graph_html_merged[card.index][0] | safe }}
+                      </div>
+                      <div class="graphs">
+                        {{ graph_html_merged[card.index][1] | safe }}
+                      </div>
+                      <div class="graphs">
+                        {{ graph_html_merged[card.index][2] | safe }}
+                      </div>
+                      <div class="graphs">
+                        {{ graph_html_merged[card.index][3] | safe }}
+                      </div>
                     </div>
                     <div class="d-flex flex-column justify-content-around">
                       <div>
-                        <h5>Procuras</h5>
-                      </div>
-                      <div>
-                        <h5>Desistencias</h5>
-                      </div>
-                      <div>
-                        <h5>Tempo medio de espera diario
-                        </h5>
-                      </div>
-                      <div>
-                        <h5>Necessity Metric</h5>
+                        <h3 class="text-center">IA Insights</h3>
+                        <div class="data-titles">
+                          {{ data_analysis[card.designacao] | safe }}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="historic-data" role="tabpanel" aria-labelledby="historic-data-tab">
-                <div class="tab-pane fade show active" id="predicted-data" role="tabpanel" aria-labelledby="historic-data-tab">
+              <div class="tab-pane fade" id="historic-data{{card.index}}" role="tabpanel"
+                aria-labelledby="historic-data-tab{{card.index}}">
+                <div class="tab-pane fade show active" id="predicted-data{{card.index}}" role="tabpanel"
+                  aria-labelledby="historic-data-tab{{card.index}}">
                   <div class="modal-body">
                     <div class="d-flex flex-column justify-content-around">
-                      <div>
-                        <!--BigQuerry Graph-->
-                        {{ graph_html[0][1] | safe }}
-                      </div>
-                      <div class="d-flex flex-column justify-content-around">
-                        <div>
-                          <h5>Procuras</h5>
+                      <h3 class="text-center pt-3">Gráficos Históricos</h3>
+                      <div class="d-flex flex-column justify-content-around graphs mx-3">
+                        <div class="graphs">
+                          {{ graph_html_historic[card.index][0] | safe }}
                         </div>
-                        <div>
-                          <h5>Desistencias</h5>
+                        <div class="graphs">
+                          {{ graph_html_historic[card.index][1] | safe }}
                         </div>
-                        <div>
-                          <h5>Tempo medio de espera diario
-                          </h5>
+                        <div class="graphs">
+                          {{ graph_html_historic[card.index][2] | safe }}
                         </div>
-                        <div>
-                          <h5>Necessity Metric</h5>
+                        <div class="graphs">
+                          {{ graph_html_historic[card.index][3] | safe }}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">Contact content...</div>
+
+              <div class="tab-pane fade" id="info{{card.index}}" role="tabpanel" aria-labelledby="info-tab{{card.index}}">
+                <div class="modal-body">
+                  <div class="d-flex flex-column justify-content-around">
+                    <h3>Informações das Métricas</h3>
+                    <ul>
+                        <li><strong>Procuras:</strong> Indica o número de pessoas que procuraram atendimento no serviço durante o mês. Este
+                        dado é fundamental para entender a demanda pelo serviço.</li>
+                      <li><strong>Atendimentos:</strong> Refere-se ao número de pessoas que efetivamente receberam atendimento no serviço
+                        durante o mês. Este ponto de dado ajuda a avaliar a capacidade de resposta do serviço à demanda.</li>
+                      <li><strong>Desistências:</strong> Representa o número de pessoas que desistiram de esperar pelo atendimento e não
+                        foram atendidas. Este dado é crucial para medir a eficácia do serviço em reter e atender aos seus utentes.</li>
+                      <li><strong>Tempo médio de espera diário:</strong> Indica o tempo médio que as pessoas esperaram diariamente para
+                        serem atendidas. Este ponto de dado é vital para avaliar a eficiência do serviço e o impacto sobre os utentes.
+                      </li>
+                      <li><strong>Necessidade:</strong>
+                        <ul>
+                          <li>A métrica de Necessidade é derivada considerando o limite de tempo de espera definido e os fatores de
+                            crescimento e densidade populacional. Ela é calculada para identificar a urgência e a necessidade de melhorar
+                            os serviços oferecidos.</li></br>
+                          <li><strong>Como é derivada:</strong></li></br>
+                            <ul>
+                              <li><strong>Limite de tempo de Espera:</strong> Define o tempo máximo aceitável que uma pessoa pode esperar
+                                antes que a situação seja considerada crítica.</li>
+                              <li><strong>Crescimento Populacional:</strong> Refere-se ao aumento da população na área servida, o que pode
+                                aumentar a demanda pelos serviços.</li>
+                              <li><strong>Densidade Populacional:</strong> Reflete o número de pessoas numa área específica, influenciando
+                                diretamente a procura pelos serviços.</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
             <!-- Modal Footer -->
             <div class="modal-footer">
@@ -120,108 +167,10 @@
           </div>
         </div>
       </div>
-      <div class="modal fade" id="modal1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-              <h4 class="modal-title">"Localização"</h4>
-            </div>
-            <!-- Modal Body -->
-            <!-- Tabs -->
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="predicted-data-tab1" data-bs-toggle="tab" href="#predicted-data1" role="tab" aria-controls="predicted-data1" aria-selected="true">Previsões</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                <a class="nav-link" id="historic-data-tab1" data-bs-toggle="tab" href="#historic-data1" role="tab" aria-controls="historic-data1" aria-selected="false">Dados históricos</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                <a class="nav-link" id="info-tab1" data-bs-toggle="tab" href="#info1" role="tab" aria-controls="info1" aria-selected="false">info</a>
-              </li>
-            </ul>
-            <!-- Tab content -->
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="predicted-data1" role="tabpanel" aria-labelledby="predicted-data-tab">
-                <div class="modal-body">
-                  <div class="d-flex flex-column justify-content-around">
-                    <div>
-                      <!--BigQuerry Graph-->
-                      {{ graph_html[1][0] | safe }}
-                    </div>
-                    <div>
-                      <!--BigQuerry Graph-->
-                      {{ graph_html[1][1] | safe }}
-                    </div>
-                    <div>
-                      <!--BigQuerry Graph-->
-                      {{ graph_html[1][2] | safe }}
-                    </div>
-                    <div>
-                      <!--BigQuerry Graph-->
-                      {{ graph_html[1][3] | safe }}
-                    </div>
-                    <div>
-                      <!--BigQuerry Graph-->
-                      {{ graph_html[1][4] | safe }}
-                    </div>
-                    <div class="d-flex flex-column justify-content-around">
-                      <div>
-                        <h5>Procuras</h5>
-                      </div>
-                      <div>
-                        <h5>Desistencias</h5>
-                      </div>
-                      <div>
-                        <h5>Tempo medio de espera diario
-                        </h5>
-                      </div>
-                      <div>
-                        <h5>Necessity Metric</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="historic-data1" role="tabpanel" aria-labelledby="historic-data-tab1">
-                <div class="tab-pane fade show active" id="predicted-data1" role="tabpanel" aria-labelledby="predicted-data-tab1">
-                  <div class="modal-body">
-                    <div class="d-flex flex-column justify-content-around">
-                      <div>
-                        <!--BigQuerry Graph-->
-                        {{ graph_html[0][1] | safe }}
-                      </div>
-                      <div class="d-flex flex-column justify-content-around">
-                        <div>
-                          <h5>Procuras</h5>
-                        </div>
-                        <div>
-                          <h5>Desistencias</h5>
-                        </div>
-                        <div>
-                          <h5>Tempo medio de espera diario
-                          </h5>
-                        </div>
-                        <div>
-                          <h5>Necessity Metric</h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="info1" role="tabpanel" aria-labelledby="info-tab1">Contact content...</div>
-            </div>
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-dark px-3" data-dismiss="modal">Fechar</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
       <div class="w-50 m-auto col p-0">
         <h3 class="p-0 m-0 text-center">
-        Previsões
+          Previsões
         </h3>
         <div class="entries m-auto my-1 px-3 py-1 w-100">
           <div class="sort item w-100 title mx-auto py-0 w-100">
@@ -240,9 +189,10 @@
           </div>
           <!-- Entries for each location -->
           {% for card in cards_data%}
-          <div class="item py-3">
+          <div class="item py-3 my-2 specific-location" id="{{card['designacao']}}"
+            data-location="{{card['designacao']}}">
             <div class="d-flex flex-row">
-              <div class="d-block p-0 mx-3 rounded-circle color-mark"></div>
+              <div class="d-block p-0 mx-3 rounded-circle color-mark indicator" data-necessity="{{ card['necessity_metric'] }}"></div>
             </div>
             <div class="row w-75 m-auto pl-2">
               <div class="col-7">
@@ -253,15 +203,18 @@
               </div>
             </div>
             <!-- Modal Button  -->
-            <button type="button" class="btn btn-primary rounded" data-id="{{card.index}}" data-toggle="modal" data-target="#modal{{card.index}}">
-                Detalhes
+            <button type="button" class="btn btn-primary w-25 rounded" data-id="{{card.index}}" data-toggle="modal"
+              data-target="#modal-{{card.index}}">
+              Detalhes
             </button>
           </div>
           {% endfor %}
         </div>
         <div class="w-100">
-          <div class="d-flex flex-row d-flex flex-row justify-content-center mx-auto">
-            <button id="add_button" type="button" class="rounded py-2 mx-1"  onclick="showEditPredictionPage()">Adicionar pontos</button>
+          <div class="mt-4 d-flex flex-row d-flex flex-row justify-content-center mx-auto">
+            <button id="add_button" type="button" class="rounded py-2 mx-1 add_button_class"
+              onclick="pushToEditPage()">Adicionar
+              pontos</button>
           </div>
         </div>
       </div>
@@ -269,122 +222,145 @@
   </div>
 </div>
 
-<div id="edit-prediction-container" class="runs w-100 m-auto">
-  <div class="w-100 m-auto p-0">
-    <div class="w-100 row m-auto p-0">
-
-      <div id="map_wrapper" class="w-50 p-0">
-        <div id="map" class="float-end border-0 m-auto" style="width: 600px"></div>
-
-      </div>
-
-      <div class="w-50 m-auto col p-0">
-        <h3 class="p-0 m-0 text-center">
-          Adicionar pontos
-        </h3>
-          <div class="add_buttons d-flex py-3 flex-row d-flex flex-row justify-content-center mx-auto">
-            <button type="button" class="rounded py-2 mx-1" onclick="addNewDraggablePoint('Fixo')">Ponto fixo</button>
-            <button type="button" class="rounded py-2 mx-1" onclick="addNewDraggablePoint('Móvel')">Ponto móvel</button>
-          </div>
-
-        <div id="add-new-pins" class="mx-auto my-1 px-5 py-1"></div>
-
-        <div class="w-100">
-          <div class="nav_buttons d-flex py-3 flex-row d-flex flex-row justify-content-center mx-auto">
-            <button type="button" class="rounded py-2 mx-1" class="" onclick="showPredictionPage()">Voltar</button>
-            <button type="button" class="rounded py-2 mx-1" onclick="saveReport()">Guardar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script src="https://maps.googleapis.com/maps/api/js?key={{ google_map_api_key }}&callback=initMap" async defer></script>
-<script>
-  /* map stuff */
-  let map;
-
-  async function addNewDraggablePoint(type) {
-    // create a new pin
-    let newPin = document.createElement("div");
-    newPin.className = "new-pin";
-    newPin.innerText = type;
-
-    let newPinesContainer = document.getElementById("add-new-pins");
-    newPinesContainer.appendChild(newPin);
-
-    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-    const randomNess = Math.random() * 0.001;
-    const draggableMarker = new AdvancedMarkerElement({
-      map,
-      position: { lat: 38.73067129535301, lng: -9.129937518620784 + randomNess },
-      gmpDraggable: true,
-      title: type,
-    });
-
-    draggableMarker.addListener("dragend", (event) => {
-      const position = draggableMarker.position;
-
-      infoWindow.close();
-      infoWindow.setContent(`Pin dropped at: ${position.lat}, ${position.lng}`);
-      infoWindow.open(draggableMarker.map, draggableMarker);
-    });
-  }
-
-  async function initMap() {
-    // Request needed libraries.
-    const { Map, InfoWindow } = await google.maps.importLibrary("maps");
-    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-    map = new Map(document.getElementById("map"), {
-      center: { lat: 38.73067129535301, lng: -9.129937518620784 },
-      zoom: 16,
-      mapId: "4504f8b37365c3d0",
-    });
-    const infoWindow = new InfoWindow();
-    const draggableMarker = new AdvancedMarkerElement({
-      map,
-      position: { lat: 38.73067129535301, lng: -9.129937518620784 },
-      gmpDraggable: true,
-      title: "This marker is draggable.",
-    });
-
-    draggableMarker.addListener("dragend", (event) => {
-      const position = draggableMarker.position;
-
-      infoWindow.close();
-      infoWindow.setContent(`Pin dropped at: ${position.lat}, ${position.lng}`);
-      infoWindow.open(draggableMarker.map, draggableMarker);
-    });
-  }
-</script>
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_map_api_key }}&callback=initMap"></script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-     document.getElementById("edit-prediction-container").style.display = "none";
+  let selectedLocation = null;
+
+  const cords = [
+    {
+      lat: 38.73137703560319,
+      lng: -9.144382789532516,
+      title: 'Loja de Cidadão Saldanha'
+    },
+    {
+      lat: 38.750402670143856,
+      lng: -9.17123563186069,
+      title: 'Loja de Cidadão Laranjeiras'
+    }
+  ];
+
+  document.addEventListener('DOMContentLoaded', (event) => {
+    // get the parent of plotty
+    $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (event) {
+      var doc = $(".tab-pane.active ..plot-container");
+      for (var i = 0; i < doc.length; i++) {
+          Plotly.relayout(doc[i], {autosize: true});
+      }
+    })
+
+    addExistingPoints();
+
+    let addButton = document.getElementById('add_button');
+    addButton.disabled = true;
+    addButton.classList.add('disabled-btn');
+
+    // get all the classes with specific-location and attach a click event that called chooseThisLocation
+    allLocationElements = document.getElementsByClassName('specific-location');
+    for (let index = 0; index < allLocationElements.length; index++) {
+      allLocationElements[index].addEventListener('click', function () {
+        // chooseThisLocation(this);
+        let addButton = document.getElementById('add_button');
+        addButton.disabled = false;
+        addButton.classList.remove('disabled-btn');
+
+
+        const location = this.getAttribute('data-location');
+        for (let i = 0; i < allLocationElements.length; i++) {
+          allLocationElements[i].classList.remove('selected-location');
+        }
+
+        this.classList.add('selected-location');
+        selectedLocation = _.head(_.filter(cords, cord => cord.title === location));
+      });
+    }
   });
 
-  function showEditPredictionPage() {
-    console.log("showEditPredictionPage");
-    let predictionContainer = document.getElementById("prediction-container");
-    let editPredictionContainer = document.getElementById("edit-prediction-container");
-
-    predictionContainer.style.display = "none";
-    editPredictionContainer.style.display = "flex";
+  function addExistingPoints() {
+    cords.forEach(cord => {
+      addNewNonDraggabePoint({ lat: cord.lat, lng: cord.lng }, cord.title, true);
+    });
   }
 
-  function showPredictionPage() {
-    let predictionContainer = document.getElementById("prediction-container");
-    let editPredictionContainer = document.getElementById("edit-prediction-container");
-
-    predictionContainer.style.display = "flex";
-    editPredictionContainer.style.display = "none";
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    // decode the url
+    return decodeURIComponent(urlParams.get(param));
   }
 
-  function saveReport() {
-    // do a post request to save the report
-    console.log("saveReport");
+  function colorize(vars, elem) {
+    let num = parseInt(vars);
+    if (num <= 33)
+      elem.style.backgroundColor = "green";
+    else if (num <= 66)
+    {
+      elem.style.backgroundColor = "yellow";
+    }
+    else
+      elem.style.backgroundColor = "rgb(199, 0, 0)";
   }
+
+  pushToEditPage = () => {
+
+    // get selected location and its cords
+    const url = `/edit?lat=${selectedLocation.lat}
+                      &lng=${selectedLocation.lng}
+                      &title=${selectedLocation.title}
+                      &location=${getQueryParam('location')}
+                      &period=${getQueryParam('period')}`;
+    window.location.href = url;
+  }
+
+  function addRows(elem, id)
+  {
+    let newRow = document.createElement('tr');
+    for (var i = 0; i < 6; i++) {
+        let newCell = document.createElement('td');
+        switch (i) {
+          case 0:
+            newCell.innerHTML = elem.getAttribute('data-year');
+            break;
+          case 1:
+            newCell.innerHTML = elem.getAttribute('data-procuras');
+            break;
+          case 2:
+            newCell.innerHTML = elem.getAttribute('data-atendim');
+            break;
+          case 3:
+            newCell.innerHTML = elem.getAttribute('data-desist');
+            break;
+          case 4:
+            newCell.innerHTML = elem.getAttribute('data-espera');
+            break;
+          case 5:
+            newCell.innerHTML = elem.getAttribute('data-necessidade');
+            break;
+          default:
+            break;
+        }
+        newRow.appendChild(newCell);
+    }
+    id.appendChild(newRow);
+  }
+
+  window.onload = function() {
+    const indicators = document.querySelectorAll('.indicator');
+    indicators.forEach(function(element) {
+      const necessityMetric = element.getAttribute('data-necessity');
+      colorize(necessityMetric, element);
+    });
+    const rows = document.querySelectorAll('.data-rows');
+    let tables = document.querySelectorAll('tbody');
+    let times = rows.length / tables.length;
+    let i = 0;
+    tables.forEach(function(id) {
+      for (; i < times; i++)
+        addRows(rows[i], id);
+      times += times;
+    });
+    window.dispatchEvent(new Event('resize'));
+  };
 </script>
 
 {% endblock %}
