@@ -3,8 +3,7 @@
 /venv
 .DS_Store
 static/.DS_Store
-static/a
-ssets/.DS_Store
-sublime-lyceum-426907-r9-353181f6f35f.json
+static/assets/.DS_Store
+sublime-lyceum-426907-r9-c71832baf239.json
 model_frame.csv
 local_cache.json

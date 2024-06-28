@@ -261,8 +261,6 @@ def save_report():
                 created_at=datetime.now(),
                 report=json.dumps(body),
                 user=session.get("user_id"),
-                cards_table=json.dumps(filtered_cards_table),
-                AI_insight=data_analysis[location]
             )
 
             db.session.add(report)
