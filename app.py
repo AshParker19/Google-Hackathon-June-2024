@@ -296,9 +296,7 @@ def report():
             'created_at': report.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'report': report.report,
             'user': user.login,
-            'email': user.email,
-            'cards_table': report.cards_table,
-            'AI_insight': report.AI_insight,
+            'email': user.email
     })
 
     return render_template(
