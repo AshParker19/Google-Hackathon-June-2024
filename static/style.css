@@ -1,32 +1,60 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+
+:root {
+    --blue: #4783e2;
+    --gray: #4f5562;
+    --lightgray: #757f87;
+    --bluesmoke: #f8fbfe;
+    --offwhite: #f8f8f8;
+    --dark: #124265;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
 
 /* base.html */
 .base
 {
     width: 100%;
     height: 100vh;
-    background-color: #f8f8f8;
+    background-color: var(--offwhite)
 }
 
 *
 {
-    font-family: "Lexend", sans-serif;
+    font-family: "Poppins", sans-serif;
+    color: var(--dark);
     font-optical-sizing: auto;
-    font-weight: 300;
+    font-weight: 200;
     font-style: normal;
+}
+
+h1, h2, h3 {
+    background-color: var(--offwhite)
+    font-family: "Lexend", sans-serif;
+}
+
+.row {
+    --bs-gutter-x: 0rem !important;
 }
 
 #logo
 {
     width: 120px;
+    opacity: 0.8;
 }
 
 button, input[type="submit"]
 {
-    background-color: darkblue;
-    color : #f8f8f8;
+    background-color:var(--blue) !important;
+    color : var(--bluesmoke) !important;
     border: none;
-    padding: 2.5% 5%;
+    padding: 5px 10px;
 }
 
 .shadow
@@ -37,7 +65,7 @@ button, input[type="submit"]
 #logged
 {
 
-    background-color: darkblue;
+    background-color: var(--blue);
     background-image: url("../static/assets/ppl-icon-white.png");
     background-size: 50%;
     background-position: center center;
@@ -47,15 +75,22 @@ button, input[type="submit"]
     cursor: pointer;
 }
 
-.bord
+footer
 {
-    border-top: 2px solid darkblue;
+    color: var(--lightgray);
+    padding: 0.5rem 0.75rem;
+    border-top: 3px solid #4783e261;
 }
 
+footer div {
+    padding-top: 0.75rem;
+    padding-bottom: 0.25rem;
+    opacity: 0.7;
+}
 
 /* signup.html */
 .header {
-    color: #333;
+    color: var(--dark)
 }
 
 
@@ -74,8 +109,10 @@ button, input[type="submit"]
 
 .intro-text
 {
-    font-size: min(4vw, 24px);
-    color: #888888
+    font-size: min(4vw, 21px);
+    color: var(--lightgray);
+    line-height: 1.4;
+    letter-spacing: 0.5px;
 }
 
 .btn-cont
@@ -86,9 +123,15 @@ button, input[type="submit"]
 .brder
 {
     border-radius: 6px;
-    border: 2px solid #e5e5e5;
+    border: 2px solid #ececec;
+    width: 14rem;
 }
 
+.dropdown_wrap {
+    display: flex;
+    justify-content: center;
+
+}
 
 /* login.html */
 .login-wrap
@@ -100,15 +143,28 @@ button, input[type="submit"]
 .item, .new-pin {
     display: flex;
     flex-flow: row;
-    justify-content: space-between;
     align-items: center;
     padding: 5px 15px;
     margin: 5px 5%;
     border: 1px solid #ddd;
     border-radius: 3px;
-    background-color: #fafafa;
+    background-color: var(--bluesmoke);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+.pin-text {
+    padding: 0px;
+    margin: 0px;
+    margin-left: 10px;
+}
+
+.delete-point {
+    margin-left: auto;
+    cursor: pointer;
+    padding: 0px 10px;
+    border-radius: 8px;
+}
+
 
 .title
 {
@@ -125,9 +181,10 @@ button, input[type="submit"]
 
 .item>button, .add
 {
-    background-color: darkblue;
     border: none;
     border-radius: 0;
+    /* font-weight: 300 !important; */
+    font-size: 0.9rem;
 }
 
 .runs
@@ -143,7 +200,7 @@ button, input[type="submit"]
 }
 
 #add-new-pins, .entries {
-    height: 350px !important;
+    height: 250px !important;
     overflow-y: scroll;
 }
 
@@ -169,9 +226,10 @@ button, input[type="submit"]
 
 .color-mark
 {
-    min-width: 12.5px;
-    min-height: 12.5px;
+    min-width: 15px;
+    min-height: 15px;
     background-color: rgb(199, 0, 0);
+    border: 1px solid #4f5562;
 }
 
 /* profile.html */
@@ -179,7 +237,7 @@ button, input[type="submit"]
 {
     padding: 50px;
     border-radius: 50%;
-    background-color: white;
+    background-color: var(--offwhite);
     background-image: url("../static/assets/ppl-icon-blue.png");
     background-size: 50%;
     background-position: center center;
@@ -194,23 +252,42 @@ button, input[type="submit"]
     box-shadow: -20px 15px 60px #00000020;
     margin: 15px 5px;
 }
+
 .image-container {
     width: 30%;
 }
 
-
 #loader {
     margin: auto;
-    margin-top: 200px;
+    margin-top: 40vh;
 }
 
 #login_button {
     font-size: 1.05rem !important;
-    padding: 0.5rem 1.7rem !important
+    padding: 0.4rem 1.7rem !important
+}
+run
+#start_button {
+    font-size: 21px !important;
+    padding: 0.5rem 7rem;
 }
 
-#login_auth {
-    padding: 0.6rem 2.4rem ! important;
+.bgr
+{
+    background-color: var(--offwhite)
+}
+
+#start_button:hover,
+.auth_login:hover,
+#report_button:hover,
+#login_button:hover,
+.item>button:hover
+{
+    background-color: #1871ff !important;
+}
+
+.auth_login, .nav_buttons button {
+    padding: 0.5rem 2rem !important;
 }
 
 #report_button {
@@ -218,10 +295,150 @@ button, input[type="submit"]
     font-size: 1.05rem !important;
 }
 
-#add_button {
+.add_button_class {
     padding: 12px 40px !important;
 }
 
+.add_button_class:hover {
+    background-color: #1871ff !important;
+}
+
+.disabled-btn {
+    background-color: #d3d3d3 !important;
+    color: #a9a9a9 !important;
+}
+
+.disabled-btn:hover {
+    background-color: #d3d3d3 !important;
+    color: #a9a9a9 !important;
+}
+
+.specific-location {
+    cursor: pointer;
+}
+
+.selected-location {
+    outline: 2px solid #1871ff !important;
+}
 #map_wrapper {
     display: flex;
+}
+
+.sort{
+    opacity:0.5;
+    font-size: 14px;
+}
+
+.add_buttons button {
+    background-color: #3c9c76 !important;
+    padding: 0.5rem 2.4rem !important;
+}
+
+#map button
+{
+    background-color: var(--offwhite) !important;
+    color: inherit !important;
+}
+
+.btn-cont {
+    display: flex;
+    justify-content: space-around;
+}
+
+.dropdown_wrap {
+    position: relative;
+}
+
+.auth_text {
+    text-align: center;
+    margin-bottom: -5px;
+    font-size: larger;
+    color: var(--dark);
+}
+
+#auth-form {
+    padding-top: 40px;
+    max-width: 40vw;
+    width: 355px;
+}
+
+#auth-form input {
+    margin-bottom: 0px;
+    padding: 9px 20px !important;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+#auth-form h4 {
+    padding-bottom: 5px;
+}
+
+#auth-form>form>input.auth_login.rounded.shadow.mt-2 {
+    opacity: 1;
+}
+
+.modal-body {
+    padding: 5% !important;
+}
+
+.data-titles {
+    padding: 1.7rem;
+    border-top: 1px solid #ededed;
+}
+
+#predicted-data0>div>div>div.d-flex.flex-column.justify-content-around>div>h3 {
+    text-align: center;
+    padding: 15px;
+    font-family: 'Poppins';
+}
+
+#info0>div>div>ul>li {
+    padding: 10px;
+}
+
+.modal-title {
+    padding: 0.3rem 1.5rem !important;
+    font-size: 18px;
+}
+
+#info0>div>div>h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    font-family: 'Poppins';
+}
+
+#modal-0>div>div>div.modal-footer>button {
+    background-color: var(--dark) !important;
+}
+
+strong {
+    font-weight: 600 !important;
+}
+
+.modal-header {
+    border-bottom: none !important;
+    padding: 10px 16px 8px 16px !important;
+}
+
+.nav-link {
+    padding: 10px 40px !important;
+}
+
+.subtext {
+    padding: 20 20 20 5px !important;
+}
+
+/* SIZE OF MODAL */
+.custom-modal {
+    max-width: 70% !important;
+}
+
+.ww
+{
+    width: 30%;
+}
+
+.graphs
+{
+    width: 100%;
 }
