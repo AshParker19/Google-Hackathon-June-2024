@@ -3,8 +3,7 @@
 /venv
 .DS_Store
 static/.DS_Store
-static/a
-ssets/.DS_Store
+static/assets/.DS_Store
 sublime-lyceum*
 model_frame.csv
 local_cache.json
